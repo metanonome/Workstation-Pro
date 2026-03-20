@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workstation Pro | CEMIG</title>
+    <style>
+        :root {
+            --bg: #0a0a0c;
+            --card: rgba(26, 26, 30, 0.9);
+            --accent: #818cf8;
+            --accent-hover: #6366f1;
+            --text-p: #f8fafc;
+            --text-s: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --success: #22c55e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-p);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            background-image:
+                radial-gradient(circle at 50% -20%, #1e1b4b, transparent),
+                radial-gradient(circle at 0% 100%, #0f172a, transparent);
+            line-height: 1.5;
+        }
+
+        .wrapper { width: 100%; max-width: 1100px; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1.5rem;
+        }
+
+        #clock {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            font-variant-numeric: tabular-nums;
+            color: var(--text-p);
+        }
+
+        #dateDisplay { color: var(--text-s); font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        .greeting-box { text-align: right; }
+        .greeting-box h3 { font-size: 1.5rem; margin-bottom: 4px; }
+        .status {
+            color: var(--success);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 6px;
+        }
+       
+        .status::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px var(--success);
+        }
+
+        .search-bar {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 12px 20px;
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            transition: border-color 0.3s;
+        }
+
+        .search-bar:focus-within { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.2); }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: white;
+            width: 100%;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .link-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.75rem 1rem;
+            text-decoration: none;
+            color: white;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .link-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px -10px rgba(0,0,0,0.5);
+        }
+
+        .icon { font-size: 2rem; filter: drop-shadow(0 0 8px rgba(129, 140, 248, 0.4)); }
+
+        .link-item span:not(.icon) {
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-s);
+        }
+       
+        .link-item:hover span:not(.icon) { color: var(--text-p); }
+
+        .utils { display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.5rem; }
+       
+        .glass-panel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .panel-label { color: var(--accent); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+
+        textarea {
+            width: 100%;
+            height: 180px;
+            background: transparent;
+            border: none;
+            color: var(--text-p);
+            resize: none;
+            outline: none;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .info-text { font-size: 0.85rem; color: var(--text-s); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+       
+        kbd {
+            background: #334155;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            color: white;
+            font-family: monospace;
+        }
+
+        @media (max-width: 768px) {
+            .utils { grid-template-columns: 1fr; }
+            header { flex-direction: column; text-align: center; gap: 1.5rem; }
+            .greeting-box { text-align: center; }
+            .status { justify-content: center; }
+        }
+
+        /* Scrollbar Custom */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-s); }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        <header>
+            <div class="time-box">
+                <div id="clock">00:00:00</div>
+                <div id="dateDisplay">Carregando data...</div>
+            </div>
+            <div class="greeting-box">
+                <h3 id="greeting">Olá, Operador</h3>
+                <div class="status">ESTAÇÃO ATIVA</div>
+            </div>
+        </header>
+
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Buscar ferramenta ou atalho..." autocomplete="off">
+        </div>
+
+        <div class="grid">
+            <a href="https://www.atendimento.cemig.com.br/portal/home" target="_blank" class="link-item">
+                <span class="icon">⚡</span>
+                <span>CEMIG ATENDE</span>
+            </a>
+            <a href="#" target="_blank" class="link-item">
+                <span class="icon">💾</span>
+                <span>SAP CENTAURUS</span>
+            </a>
+            <a href="https://devmis.tel.inf.br/consulta_pop/" target="_blank" class="link-item">
+                <span class="icon">🔍</span>
+                <span>CONSULTA POP</span>
+            </a>
+            <a href="https://dash.lorni.com.br/launcher" target="_blank" class="link-item">
+                <span class="icon">📊</span>
+                <span>DASH LORNI</span>
+            </a>
+            <a href="http://10.196.246.4/Eaglleibm/" target="_blank" class="link-item">
+                <span class="icon">🛡️</span>
+                <span>EAGLLE IBM</span>
+            </a>
+        </div>
+
+        <div class="utils">
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <span class="panel-label">Bloco de Notas Privado</span>
+                    <span id="charCount" style="font-size: 0.6rem; color: var(--text-s)">0 chars</span>
+                </div>
+                <textarea id="notepad" placeholder="Suas anotações temporárias ficam salvas aqui automaticamente..."></textarea>
+            </div>
+           
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <span class="panel-label">Sistema & Atalhos</span>
+                </div>
+                <p class="info-text"><span>📝</span> Notas salvas no navegador.</p>
+                <p class="info-text"><kbd>CTRL</kbd> + <kbd>R</kbd> Atualizar sistema.</p>
+                <p class="info-text"><kbd>CTRL</kbd> + <kbd>F</kbd> Pesquisa rápida.</p>
+                <p class="info-text" style="margin-top: auto; font-weight: bold; color: var(--accent);">V. 2.1 - Estável</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Relógio e Data Otimizados
+        function updateDisplay() {
+            const agora = new Date();
+           
+            // Relógio com zero à esquerda
+            document.getElementById('clock').textContent = agora.toLocaleTimeString('pt-BR');
+           
+            // Data formatada elegante
+            const opcoes = { weekday: 'long', day: 'numeric', month: 'long' };
+            document.getElementById('dateDisplay').textContent = agora.toLocaleDateString('pt-BR', opcoes);
+
+            // Saudação Contextual
+            const hora = agora.getHours();
+            let saudacao;
+            if(hora >= 5 && hora < 12) saudacao = "Bom dia, Operador ☕";
+            else if(hora >= 12 && hora < 18) saudacao = "Boa tarde, Operador ☀️";
+            else saudacao = "Boa noite, Operador 🌙";
+           
+            document.getElementById('greeting').textContent = saudacao;
+        }
+
+        // Filtro de Busca
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const termo = e.target.value.toLowerCase();
+            const itens = document.querySelectorAll('.link-item');
+           
+            itens.forEach(item => {
+                const texto = item.textContent.toLowerCase();
+                item.style.display = texto.includes(termo) ? 'flex' : 'none';
+            });
+        });
+
+        // Bloco de Notas com contador
+        const notepad = document.getElementById('notepad');
+        const charCount = document.getElementById('charCount');
+
+        const saveNotes = () => {
+            localStorage.setItem('notas_ruan_v2', notepad.value);
+            charCount.textContent = `${notepad.value.length} chars`;
+        };
+
+        notepad.value = localStorage.getItem('notas_ruan_v2') || "";
+        charCount.textContent = `${notepad.value.length} chars`;
+        notepad.addEventListener('input', saveNotes);
+
+        // Inicia e define intervalo
+        updateDisplay();
+        setInterval(updateDisplay, 1000);
+
+        // Atalho para focar na busca ao pressionar '/'
+        document.addEventListener('keydown', (e) => {
+            if(e.key === '/' && document.activeElement !== notepad) {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+        });
+    </script>
+</body>
+</html>
